@@ -2,19 +2,23 @@
 import http from './utils/http'
 import { ResponseType } from '@tauri-apps/api/http'
 import { event } from 'vue-gtag'
+import { ref } from 'vue'
+// google 统计
 event('login', { method: 'Google' })
 //app版本
-const appVersion = 0.1
+const localVersion = 0.1
 // 分享应用
 var shareContent = '1024老司机邮箱: 1024xiaoshen@gmail.com'
 // github信息
 var gitSource = 'https://api.github.com/repos/Sjj1024/Sjj1024/contents'
 // 桌面程序的常量配置
 var sourceUrl: string[] = [
-    `${gitSource}/.github/hubsql/chromHuijia.txt`,
+    `${gitSource}/.github/hubsql/deskHuijia.txt`,
     'https://www.cnblogs.com/sdfasdf/p/15115801.html',
     'https://xiaoshen.blog.csdn.net/article/details/129345827',
 ]
+
+var moreInfo = ref('数据加载中...')
 
 let errorInfo: string = `加载数据失败!<br>
 1.网络可能有问题，请保持网络通畅后再试。<br>
@@ -29,58 +33,73 @@ http(sourceUrl[0], {
 }).then(async (response: any) => {
     var contentBase64 = response.data.content
     console.log('Github获取到的数据是:', contentBase64)
-    var content:any = atob(contentBase64)
-    var realContent = content.replaceAll("VkdWxlIGV4cHJlc3Npb25z", "")
-    console.log("realContent", realContent);
+    var content: any = atob(contentBase64)
+    var realContent = content.replaceAll('VkdWxlIGV4cHJlc3Npb25z', '')
+    console.log('realContent', realContent)
     var realJson = JSON.parse(atob(realContent))
-    console.log("解析到的真是数据是", realJson);
-    
+    console.log('解析到的真是数据是', realJson)
+
     if (!realJson) {
-      // getExtensionBokeyuan()
-      return
+        // getExtensionBokeyuan()
+        console.log('github 获取数据失败')
+        return
     } else {
-      // 存储到缓存里面
-      await storageSet("content", realJson)
-      // 判断是不是已经被缓存渲染了
-      var aHots = document.querySelectorAll("a")
-      if (aHots.length >= 10) {
-        console.log('已经被缓存渲染过了');
-      } else {
-        console.log('开始渲染地址...');
-        getChromeHuijiaData()
-      }
+        // 存储到缓存里面
+        await storageSet('content', realJson)
+        // 判断是不是已经被缓存渲染了
+        var aHots = document.querySelectorAll('a')
+        if (aHots.length >= 10) {
+            console.log('已经被缓存渲染过了')
+        } else {
+            console.log('开始渲染地址...')
+            getChromeHuijiaData()
+        }
     }
 })
 
-
+// 从缓存中读书数据并渲染
 function getChromeHuijiaData() {
-  // 从缓存中获取导航数据
-  var realJson = storageGet("content")
-  if (realJson) {
-    console.log("realJsonCache", realJson);
-    
-  }
+    // 从缓存中获取导航数据
+    var realJson = storageGet('content')
+    if (realJson) {
+        console.log('realJsonCache', realJson)
+        initInfo(realJson)
+    }
 }
 
+function initInfo(realJson: any) {
+    // 判断是否更新
+    if (realJson.update.show && localVersion < realJson.version) {
+        // 提醒更新
+        alert('更新提醒:' + realJson.update.content)
+        window.open(realJson.update.url)
+    }
+    // 判断是否弹窗
+    if (realJson.dialog.show) {
+        alert('提示内容:' + realJson.dialog.content)
+    }
+    // 页面嵌入info
+    moreInfo = realJson.data.more_info.trim()
+}
 
-function storageSet(key:string, value:any) {
-  // 如果是json就序列化
-  if (value instanceof Object) {
-    value = JSON.stringify(value)
-  }
-  localStorage.setItem(key, value)
+function storageSet(key: string, value: any) {
+    // 如果是json就序列化
+    if (value instanceof Object) {
+        value = JSON.stringify(value)
+    }
+    localStorage.setItem(key, value)
 }
 
 // 读取数据
-function storageGet(key:string) {
-  var value = localStorage.getItem(key)
-  // 如果是json就序列化
-  try {
-    value = value && JSON.parse(value)
-  } catch (error) {
-    console.log('storageGet反序列化出错', key, value);
-  }
-  return value
+function storageGet(key: string) {
+    var value = localStorage.getItem(key)
+    // 如果是json就序列化
+    try {
+        value = value && JSON.parse(value)
+    } catch (error) {
+        console.log('storageGet反序列化出错', key, value)
+    }
+    return value
 }
 
 async function getData() {
@@ -115,7 +134,7 @@ async function getData() {
                     <button class="btn" id="yongjiu">永久地址</button>
                     <button class="btn" id="share">分享软件</button>
                 </div>
-                <div class="info" id="info">提示: 数据加载中...</div>
+                <div class="info" id="info">提示: {{ moreInfo }}</div>
                 <input
                     type="text"
                     id="hide"
@@ -233,87 +252,6 @@ async function getData() {
                 </div>
             </div> -->
         </div>
-        <div class="tabBox">
-            <h3 class="tabTitle" style="background-color: rgb(0, 108, 130)">
-                热门推荐
-            </h3>
-            <div class="aBox">
-                <a
-                    class="alink"
-                    href="https://cl.7807x.xyz/"
-                    target="_blank"
-                    id="caoliu"
-                    >1024草榴1</a
-                ><a
-                    class="alink"
-                    href="https://cl.7807y.xyz/"
-                    target="_blank"
-                    id="caoliu"
-                    >1024草榴2</a
-                ><a
-                    class="alink"
-                    href="https://cl.7807z.xyz/"
-                    target="_blank"
-                    id="caoliu"
-                    >1024草榴3</a
-                ><a
-                    class="alink"
-                    href="https://f0225.9p234.com/index.php"
-                    target="_blank"
-                    >91Pr视频1</a
-                ><a
-                    class="alink"
-                    href="https://f0225.9p234.com/index.php"
-                    target="_blank"
-                    >91Pr视频2</a
-                ><a
-                    class="alink"
-                    href="https://t0302.91p01.app/index.php"
-                    target="_blank"
-                    >91Pr图片</a
-                ><a class="alink" href="https://j1di.vip/" target="_blank"
-                    >98色花堂1</a
-                ><a
-                    class="alink"
-                    href="https://gfhgfjhg.5qkdv.com/"
-                    target="_blank"
-                    >98色花堂2</a
-                ><a class="alink" href="https://www.zxh54s.co" target="_blank"
-                    >98色花堂3</a
-                ><a class="alink" href="https://zztt52.com" target="_blank"
-                    >黑料B打烊1</a
-                ><a class="alink" href="https://zztt53.com" target="_blank"
-                    >黑料B打烊2</a
-                ><a class="alink" href="https://zztt54.com" target="_blank"
-                    >黑料B打烊3</a
-                ><a class="alink" href="https://www.seejav.pw" target="_blank"
-                    >JavBus网1</a
-                ><a class="alink" href="https://www.busjav.fun" target="_blank"
-                    >JavBus网2</a
-                ><a class="alink" href="https://www.javsee.club" target="_blank"
-                    >JavBus网3</a
-                ><a
-                    class="alink"
-                    href="https://bbs23.zjjtree.com/2048/"
-                    target="_blank"
-                    >2048地址1</a
-                ><a
-                    class="alink"
-                    href="https://bbs23.kuireng.com/2048/"
-                    target="_blank"
-                    >2048地址2</a
-                ><a
-                    class="alink"
-                    href="https://bbs23.scxbf.com/2048/?mmxkbe=ozxy22"
-                    target="_blank"
-                    >2048地址3</a
-                ><a class="alink" href="https://v.nrzj.vip/" target="_blank"
-                    >1024抖妹</a
-                ><a class="alink" href="https://yandex.com/" target="_blank"
-                    >Yandex搜索</a
-                >
-            </div>
-        </div>
         <div class="footer">
             <div class="footBox">
                 <div class="title">1024回家是世界上最好的色情网站目录！</div>
@@ -390,7 +328,7 @@ async function getData() {
 }
 
 .testBox {
-    padding: 0px 10px 10px 10px;
+    padding: 0px 10px 0 10px;
 }
 
 .testing {
