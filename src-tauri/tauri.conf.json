@@ -1,0 +1,55 @@
+{
+  "build": {
+    "beforeDevCommand": "yarn dev",
+    "beforeBuildCommand": "yarn build",
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist",
+    "withGlobalTauri": false
+  },
+  "package": {
+    "productName": "1024Home",
+    "version": "0.0.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": true,
+      "http":{
+        "scope":[
+          "http://**",
+          "https://**"
+        ]
+      },
+      "shell": {
+        "all": false,
+        "open": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "icon": [
+        "icons/huijia32.png",
+        "icons/huijia128.png",
+        "icons/huijia256.png",
+        "icons/huijia.icns",
+        "icons/huijia.ico"
+      ],
+      "identifier": "com.desk1024.dev",
+      "targets": "all"
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": true,
+        "title": "1024回家",
+        "width": 1000,
+        "height": 600
+      }
+    ]
+  }
+}
