@@ -25,6 +25,7 @@ cantRightClick()
 
 // 初始化数据
 var moreInfo = ref('提示：数据加载中...')
+var guideTime = ref('地址更新时间...')
 var password = ref('')
 var hiddenBox = ref(false)
 var realJsonLoc: any = reactive({
@@ -181,6 +182,7 @@ function getChromeHuijiaData() {
         Object.assign(realJsonLoc, realJson)
         // 页面嵌入info和分享内容
         moreInfo = realJson.data.more_info.trim()
+        guideTime = realJson.data.guide_time.trim()
         shareContent = realJson.data.share
         // 渲染导航
         Object.assign(hotUrls, realJson.data.navigation.hotbox)
@@ -335,6 +337,9 @@ function cantRightClick() {
                     <button class="btn" @click="shareDesk(shareContent)">
                         分享软件
                     </button>
+                </div>
+                <div class="guide-time" id="guideTime">
+                    {{ guideTime }}
                 </div>
                 <div class="info" id="info">{{ moreInfo }}</div>
                 <input
