@@ -1,14 +1,12 @@
 {
   "name": "1024_desk",
-  "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "tauri": "tauri dev",
-    "publish": "tauri build"
+    "tauri": "tauri",
+    "pubhome": "tauri build"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
