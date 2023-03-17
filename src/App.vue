@@ -1,85 +1,226 @@
 <script setup lang="ts">
-import http from './utils/http'
+import http from './utils/request'
 import { ResponseType } from '@tauri-apps/api/http'
 import { event } from 'vue-gtag'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
+import { copyToClipboard } from './utils/some'
+import { message, confirm } from '@tauri-apps/api/dialog'
+
 // google 统计
 event('login', { method: 'Google' })
 //app版本
 const localVersion = 0.1
 // 分享应用
-var shareContent = '1024老司机邮箱: 1024xiaoshen@gmail.com'
+var shareContent = ref('1024老司机邮箱: 1024xiaoshen@gmail.com')
 // github信息
 var gitSource = 'https://api.github.com/repos/Sjj1024/Sjj1024/contents'
 // 桌面程序的常量配置
 var sourceUrl: string[] = [
     `${gitSource}/.github/hubsql/deskHuijia.txt`,
-    'https://www.cnblogs.com/sdfasdf/p/15115801.html',
-    'https://xiaoshen.blog.csdn.net/article/details/129345827',
+    'https://www.cnblogs.com/sdfasdf/p/16101765.html',
+    'https://xiaoshen.blog.csdn.net/article/details/129388703',
 ]
 
-var moreInfo = ref('数据加载中...')
+// 禁止右键等操作
+// cantRightClick()
 
-let errorInfo: string = `加载数据失败!<br>
-1.网络可能有问题，请保持网络通畅后再试。<br>
-2.网站链接可能需要VPN翻墙后才能访问。<br>
-3.有的网络运营商可能把网站屏蔽了，更换移动/WIFI网络后重新打开试试。<br>
-4.或者右上角浏览器打开试试，真不行请发邮件联系：1024xiaoshen@gmail.com`
+// 初始化数据
+var moreInfo = ref('提示：数据加载中...')
+var guideTime = ref('地址更新时间...')
+var updateUrl = ref('https://www.csdn.net/')
+var updateA = ref<any>(null)
+var password = ref<any>(null)
+var hiddenBox = ref(false)
+var realJsonLoc: any = reactive({
+    data: {
+        android: '',
+        windows: '',
+        macbook: '',
+        iphone: '',
+        yongjiu: '',
+    },
+})
+var hotUrls: any = reactive({})
+var navigations: any = reactive({})
+
+let errorInfo: string = `加载数据失败!\r
+  1.网络可能有问题，请保持网络通畅后再试。\r
+  2.网站链接可能需要VPN翻墙后才能访问。\r
+  3.有的网络运营商把网站屏蔽了，更换网络后重新打开试试。\r
+  4.真不行请发邮件重新获取地址：1024xiaoshen@gmail.com`
 
 // 发送请求获取数据
 http(sourceUrl[0], {
     method: 'get',
     responseType: ResponseType.JSON,
-}).then(async (response: any) => {
-    var contentBase64 = response.data.content
-    console.log('Github获取到的数据是:', contentBase64)
-    var content: any = atob(contentBase64)
-    var realContent = content.replaceAll('VkdWxlIGV4cHJlc3Npb25z', '')
-    console.log('realContent', realContent)
-    var realJson = JSON.parse(atob(realContent))
-    console.log('解析到的真是数据是', realJson)
-
-    if (!realJson) {
-        // getExtensionBokeyuan()
-        console.log('github 获取数据失败')
-        return
-    } else {
-        // 存储到缓存里面
-        await storageSet('content', realJson)
-        // 判断是不是已经被缓存渲染了
-        var aHots = document.querySelectorAll('a')
-        if (aHots.length >= 10) {
-            console.log('已经被缓存渲染过了')
-        } else {
-            console.log('开始渲染地址...')
-            getChromeHuijiaData()
-        }
-    }
 })
+    .then(async (response: any) => {
+        var contentBase64 = response.data.content
+        var content: any = atob(contentBase64)
+        var realContent = content.replaceAll('VkdWxlIGV4cHJlc3Npb25z', '')
+        // console.log('realContent', realContent)
+        var realJson = JSON.parse(atob(realContent))
+        // console.log('解析到的真是数据是', realJson)
+        if (!realJson) {
+            // getExtensionBokeyuan()
+            console.log('github 获取数据失败')
+            return
+        } else {
+            // 存储到缓存里面
+            await storageSet('content', realContent)
+            // 判断是不是已经被缓存渲染了
+            var aHots = document.querySelectorAll('a')
+            if (aHots.length >= 10) {
+                console.log('已经被缓存渲染过了')
+            } else {
+                console.log('开始渲染地址...')
+                getChromeHuijiaData()
+            }
+        }
+    })
+    .catch((error) => {
+        console.log('github地址获取失败...')
+        getExtensionBokeyuan()
+    })
+
+// 从博客园获取地址并
+function getExtensionBokeyuan() {
+    http(sourceUrl[1], {
+        method: 'GET',
+        responseType: ResponseType.Text,
+    })
+        .then((result: any) => {
+            var htmlContent = result.data
+            // console.log('博客园数据:', htmlContent)
+            const realContent = htmlContent.match(
+                /VkdWxlIGV4cHJlc3Npb25z(.*?)VkdWxlIGV4cHJlc3Npb25z/
+            )
+            if (realContent && realContent.length >= 2) {
+                console.log('匹配到的内容是', realContent[1])
+                var realJson = JSON.parse(atob(realContent[1]))
+                if (!realJson) {
+                    getExtensionCsdn()
+                    return
+                }
+                // 存储到缓存里面
+                storageSet('content', realContent[1])
+                // 判断是不是已经被缓存渲染了
+                var aHots = document.querySelectorAll('a')
+                if (aHots.length >= 10) {
+                    console.log('已经被缓存渲染过了')
+                } else {
+                    console.log('开始渲染地址...')
+                    getChromeHuijiaData()
+                }
+            }
+        })
+        .catch((error) => {
+            console.log('boke地址获取失败...', error)
+            getExtensionCsdn()
+        })
+}
+
+// 从CSDN上获取数据
+function getExtensionCsdn() {
+    var myHeaders = new Headers()
+    myHeaders.append('authority', 'xiaoshen.blog.csdn.net')
+    myHeaders.append(
+        'referer',
+        'https://mp.csdn.net/mp_blog/manage/article?spm=1011.2124.3001.5298'
+    )
+    myHeaders.append(
+        'user-agent',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
+    )
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        responseType: ResponseType.Text,
+    }
+    http(sourceUrl[2], requestOptions)
+        .then(function (result: any) {
+            var htmlContent = result.data
+            console.log('CSDN数据:', htmlContent)
+            const realContent = htmlContent.match(
+                /VkdWxlIGV4cHJlc3Npb25z(.*?)VkdWxlIGV4cHJlc3Npb25z/
+            )
+            if (realContent && realContent.length >= 2) {
+                const contentReal = realContent[1].replaceAll('&#43;', '+')
+                // console.log('CSDN匹配到的内容是', contentReal);
+                var realJson = JSON.parse(atob(contentReal))
+                if (!realJson) {
+                    alert(
+                        '地址获取失败，请更换网络后重试或邮件联系:1024xiaoshen@gmail.com'
+                    )
+                    return
+                } else {
+                    // 存储到缓存里面
+                    storageSet('content', realContent[1])
+                    // 判断是不是已经被缓存渲染了
+                    var aHots = document.querySelectorAll('a')
+                    if (aHots.length >= 10) {
+                        console.log('已经被缓存渲染过了')
+                    } else {
+                        console.log('开始渲染地址...')
+                        getChromeHuijiaData()
+                    }
+                }
+            }
+        })
+        .catch((error) => {
+            console.log('csdn地址获取失败...', error)
+            alert(errorInfo)
+        })
+}
 
 // 从缓存中读书数据并渲染
 function getChromeHuijiaData() {
     // 从缓存中获取导航数据
-    var realJson = storageGet('content')
-    if (realJson) {
+    var realContent = storageGet('content')
+    if (realContent) {
+        var realJson = JSON.parse(atob(realContent))
         console.log('realJsonCache', realJson)
+        // 弹窗提醒
         initInfo(realJson)
+        Object.assign(realJsonLoc, realJson)
+        // 页面嵌入info和分享内容
+        updateUrl = realJson.update.url
+        moreInfo = realJson.data.more_info.trim()
+        guideTime = realJson.data.guide_time.trim()
+        shareContent = realJson.data.share
+        // 渲染导航
+        Object.assign(hotUrls, realJson.data.navigation.hotbox)
+        console.log('hotUrls-----', hotUrls)
+        // 不是热门推荐
+        delete realJson.data.navigation.hotbox
+        Object.assign(navigations, realJson.data.navigation)
+        // navigations = realJson.data.navigation
+        console.log('realJson.data.navigation', navigations)
     }
 }
 
-function initInfo(realJson: any) {
+async function initInfo(realJson: any) {
     // 判断是否更新
     if (realJson.update.show && localVersion < realJson.version) {
         // 提醒更新
-        alert('更新提醒:' + realJson.update.content)
-        window.open(realJson.update.url)
+        await message('更新提醒:' + realJson.update.content, {
+            title: '升级提醒',
+            type: 'info',
+        })
+        // console.log('updateA------', updateA)
+        updateA.value.click()
     }
     // 判断是否弹窗
     if (realJson.dialog.show) {
-        alert('提示内容:' + realJson.dialog.content)
+        // alert('提示内容:' + realJson.dialog.content)
+        const confirmed2 = await confirm(
+            '提示内容:' + realJson.dialog.content,
+            { title: '消息提醒', type: 'warning' }
+        )
+        if (confirmed2 && realJson.dialog.url) {
+          window.location.href = realJson.dialog.url
+        }
     }
-    // 页面嵌入info
-    moreInfo = realJson.data.more_info.trim()
 }
 
 function storageSet(key: string, value: any) {
@@ -90,8 +231,21 @@ function storageSet(key: string, value: any) {
     localStorage.setItem(key, value)
 }
 
+// 隐藏功能开启
+async function tiggleHiddenBox() {
+    console.log('password, realJson', password, realJsonLoc.password)
+    if (password.value === realJsonLoc.password) {
+        hiddenBox.value = !hiddenBox.value
+        localStorage.setItem('password', realJsonLoc.password)
+    } else {
+        await message('密码不正确！', { title: '1024回家', type: 'error' })
+        password.value = localStorage.getItem('password')
+    }
+    console.log('隐藏是否--', hiddenBox)
+}
+
 // 读取数据
-function storageGet(key: string) {
+function storageGet(key: string): any {
     var value = localStorage.getItem(key)
     // 如果是json就序列化
     try {
@@ -102,14 +256,52 @@ function storageGet(key: string) {
     return value
 }
 
-async function getData() {
-    const params = {}
-    const res = await http('https://www.baidu.com', {
-        method: 'get',
-        params,
-        responseType: ResponseType.Text,
-    })
-    console.log('返回的数据是：', res)
+// 打开弹窗
+async function openMessage() {
+    await message('Tauri is awesome', 'Tauri')
+    await message('File not found', { title: 'Tauri', type: 'error' })
+}
+
+function shareDesk(val: any) {
+    copyToClipboard(val)
+    alert('已复制到剪切板，快去教他们开车吧！')
+}
+
+function cantRightClick() {
+    // 禁止右键和检查
+    //禁止F12
+    document.onkeydown = function (event: any) {
+        var winEvent: any = window.event
+        if (winEvent && winEvent.keyCode == 123) {
+            event.keyCode = 0
+            event.returnValue = false
+        }
+        if (winEvent && winEvent.keyCode == 13) {
+            winEvent.keyCode = 505
+        }
+    }
+
+    //屏蔽右键菜单
+    document.oncontextmenu = function (event: any) {
+        if (window.event) {
+            event = window.event
+        }
+        try {
+            var the = event.srcElement
+            if (
+                !(
+                    (the.tagName == 'INPUT' &&
+                        the.type.toLowerCase() == 'text') ||
+                    the.tagName == 'TEXTAREA'
+                )
+            ) {
+                return false
+            }
+            return true
+        } catch (e) {
+            return false
+        }
+    }
 }
 </script>
 
@@ -122,19 +314,56 @@ async function getData() {
                     <span class="action">试验功能：</span>
                     <input
                         class="password"
-                        id="password"
+                        v-model="password"
                         type="password"
                         placeholder="输入密码后访问"
                     />
-                    <button class="btn" id="openDor">芝麻开门</button>
-                    <button class="btn" id="android">安卓APP</button>
-                    <button class="btn" id="windows">Windows</button>
-                    <button class="btn" id="macbook">Mac电脑</button>
-                    <button class="btn" id="iphone">iPhone版</button>
-                    <button class="btn" id="yongjiu">永久地址</button>
-                    <button class="btn" id="share">分享软件</button>
+                    <button class="btn" id="openDor" @click="tiggleHiddenBox">
+                        芝麻开门
+                    </button>
+                    <a
+                        :href="realJsonLoc.data.android"
+                        class="btn"
+                        target="_blank"
+                        id="android"
+                        >安卓APP</a
+                    >
+                    <a
+                        :href="realJsonLoc.data.windows"
+                        class="btn"
+                        target="_blank"
+                        id="windows"
+                        >Windows</a
+                    >
+                    <a
+                        :href="realJsonLoc.data.macbook"
+                        class="btn"
+                        target="_blank"
+                        id="macbook"
+                        >Mac电脑</a
+                    >
+                    <a
+                        :href="realJsonLoc.data.iphone"
+                        class="btn"
+                        target="_blank"
+                        id="iphone"
+                        >iPhone版</a
+                    >
+                    <a
+                        :href="realJsonLoc.data.windows"
+                        class="btn"
+                        target="_blank"
+                        id="yongjiu"
+                        >永久地址</a
+                    >
+                    <button class="btn" @click="shareDesk(shareContent)">
+                        分享软件
+                    </button>
                 </div>
-                <div class="info" id="info">提示: {{ moreInfo }}</div>
+                <div class="guide-time" id="guideTime">
+                    {{ guideTime }}
+                </div>
+                <div class="info" id="info">{{ moreInfo }}</div>
                 <input
                     type="text"
                     id="hide"
@@ -143,116 +372,82 @@ async function getData() {
                 />
             </div>
         </div>
-        <div class="contentBox" id="contentBox">
-            <div class="hidden tabBox" id="hidden">
+        <div class="contentBox" id="contentBox" v-if="hiddenBox">
+            <div class="tabBox" id="hidden">
                 <h3 class="tabTitle">隐藏功能</h3>
                 <div class="actionBox">
-                    <div class="oneTest">
+                    <div>
                         <a
+                            class="btn"
                             href="https://www.baidu.com/"
                             target="_blank"
-                            style="text-decoration: none"
+                            style="text-decoration: none; margin-left: 0"
                             >百度一下</a
                         >
                     </div>
-                    <div class="oneTest">
-                        <button id="clearLocal">清空缓存</button>
+                    <div>
+                        <button class="btn" id="clearLocal">清空缓存</button>
                     </div>
-                    <div class="oneTest">
-                        <button id="offAd">关闭广告</button>
+                    <div>
+                        <button class="btn" id="offAd">关闭广告</button>
                     </div>
-                    <div class="oneTest">
-                        <button id="onAd">开启广告</button>
+                    <div>
+                        <button class="btn" @click="initInfo(realJsonLoc)">
+                            升级提醒
+                        </button>
                     </div>
-                    <div class="oneTest">
-                        <a
-                            href="https://fanyi.baidu.com/"
-                            target="_blank"
-                            style="text-decoration: none"
-                            >淘宝搜
-                        </a>
+                    <div>
+                        <button class="btn" @click="openMessage">
+                            打开弹窗
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn" id="onAd">开启广告</button>
                     </div>
                 </div>
             </div>
-            <!-- <div class="tabBox">
-                <h3 class="tabTitle">热门推荐</h3>
-                <div class="aBox">
-                    <a
-                        href="https://www.baidu.com/"
-                        class="alink"
-                        target="_blank"
-                        >百度一下</a
-                    >
-                    <a
-                        href="https://fanyi.baidu.com/"
-                        class="alink"
-                        target="_blank"
-                        >淘宝搜索</a
-                    >
-                    <a
-                        href="https://www.csdn.net/"
-                        class="alink"
-                        target="_blank"
-                        >淘宝搜索</a
-                    >
-                    <a
-                        href="https://fanyi.baidu.com/"
-                        class="alink"
-                        target="_blank"
-                        >淘宝搜索</a
-                    >
-                    <a
-                        href="https://fanyi.baidu.com/"
-                        class="alink"
-                        target="_blank"
-                        >淘宝搜索</a
-                    >
-                    <a
-                        href="https://fanyi.baidu.com/"
-                        class="alink"
-                        target="_blank"
-                        >淘宝搜索</a
-                    >
-                    <a
-                        href="https://fanyi.baidu.com/"
-                        class="alink"
-                        target="_blank"
-                        >淘宝搜索</a
-                    >
-                    <a
-                        href="https://fanyi.baidu.com/"
-                        class="alink"
-                        target="_blank"
-                        >淘宝搜索</a
-                    >
-                    <a
-                        href="https://fanyi.baidu.com/"
-                        class="alink"
-                        target="_blank"
-                        >淘宝搜索</a
-                    >
-                    <a
-                        href="https://fanyi.baidu.com/"
-                        class="alink"
-                        target="_blank"
-                        >淘宝搜索</a
-                    >
-                    <a
-                        href="https://fanyi.baidu.com/"
-                        class="alink"
-                        target="_blank"
-                        >淘宝搜索</a
-                    >
-                    <a
-                        href="https://fanyi.baidu.com/"
-                        class="alink"
-                        target="_blank"
-                        >淘宝搜索</a
-                    >
-                </div>
-            </div> -->
+        </div>
+        <!-- 热门导航 -->
+        <div class="tabBox">
+            <h3 class="tabTitle" style="background-color: rgb(0, 108, 130)">
+                {{ hotUrls.title }}
+            </h3>
+            <div class="aBox">
+                <a
+                    class="alink"
+                    :href="item.url"
+                    target="_blank"
+                    id="caoliu"
+                    v-for="(item, index) in hotUrls.data"
+                    :key="index"
+                    >{{ item.title }}
+                </a>
+            </div>
+        </div>
+        <!-- 普通导航 -->
+        <div class="tabBox" v-for="(val, key, index) in navigations" :key="key">
+            <h3 class="tabTitle" style="background-color: rgb(0, 108, 130)">
+                {{ val.title }}
+            </h3>
+            <div class="aBox">
+                <a
+                    class="alink"
+                    :href="item.url"
+                    target="_blank"
+                    id="caoliu"
+                    v-for="item in val.data"
+                    >{{ item.title }}
+                </a>
+            </div>
         </div>
         <div class="footer">
+            <a
+                :href="updateUrl"
+                style="display: none"
+                ref="updateA"
+                target="_blank"
+                >升级链接</a
+            >
             <div class="footBox">
                 <div class="title">1024回家是世界上最好的色情网站目录！</div>
                 <div class="pInfo">
@@ -369,12 +564,13 @@ async function getData() {
     border: 1px solid #dcdfe6;
     color: black;
     text-align: center;
+    text-decoration: none;
     box-sizing: border-box;
     outline: none;
     margin: 0;
     transition: 0.1s;
     font-weight: 600;
-    padding: 6px 10px;
+    padding: 3px 5px;
     font-size: 13px;
     border-radius: 3px;
     margin-left: 10px;
