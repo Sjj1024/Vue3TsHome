@@ -22,7 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-<<<<<<< HEAD
-src-tauri/target/*
-=======
->>>>>>> 24718178adee77e1802e3a5a6d044347a2637a0d
