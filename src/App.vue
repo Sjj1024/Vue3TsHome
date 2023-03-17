@@ -203,7 +203,7 @@ async function initInfo(realJson: any) {
     // 判断是否更新
     if (realJson.update.show && localVersion < realJson.version) {
         // 提醒更新
-        await message('更新提醒:' + realJson.update.content, {
+        await message(realJson.update.content, {
             title: '升级提醒',
             type: 'info',
         })
@@ -213,12 +213,12 @@ async function initInfo(realJson: any) {
     // 判断是否弹窗
     if (realJson.dialog.show) {
         // alert('提示内容:' + realJson.dialog.content)
-        const confirmed2 = await confirm(
-            '提示内容:' + realJson.dialog.content,
-            { title: '消息提醒', type: 'warning' }
-        )
+        const confirmed2 = await confirm(realJson.dialog.content, {
+            title: '消息提醒',
+            type: 'warning',
+        })
         if (confirmed2 && realJson.dialog.url) {
-          window.location.href = realJson.dialog.url
+            window.location.href = realJson.dialog.url
         }
     }
 }
