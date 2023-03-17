@@ -99,11 +99,10 @@ jobs:
  
       # 安装依赖执行构建，以及推送 github release
       - name: Install app dependencies and build it
-        run: yarn && yarn publish
+        run: yarn && yarn publish --token=${{ secrets.GITHUB_TOKEN }}
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         with:
           always-auth: true
           releaseId: ${{ needs.create-release.outputs.RELEASE_UPLOAD_ID }}
