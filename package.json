@@ -1,5 +1,5 @@
 {
-  "name": "huijia-exe",
+  "name": "1024_desk",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,15 +11,19 @@
     "publish": "tauri build"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^6.1.0",
     "@tauri-apps/api": "^1.2.0",
-    "qs": "^6.11.1",
+    "ant-design-vue": "^3.2.15",
+    "node-sass": "^8.0.0",
+    "pinia": "^2.0.33",
+    "sass-loader": "^13.2.0",
+    "style-loader": "^3.3.1",
     "vue": "^3.2.45",
     "vue-gtag": "^2.0.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.2.2",
     "@types/node": "^18.7.10",
-    "@types/qs": "^6.9.7",
     "@vitejs/plugin-vue": "^4.0.0",
     "typescript": "^4.6.4",
     "vite": "^4.0.0",
