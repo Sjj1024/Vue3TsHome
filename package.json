@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build:fe": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "tauri": "tauri dev",
-    "build": "tauri build"
+    "tauri": "tauri",
+    "pubhome": "tauri build"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
