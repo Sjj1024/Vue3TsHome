@@ -2,7 +2,7 @@ body {
 	overflow-y: scroll;
 }
 body::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 body::-webkit-scrollbar-thumb {
     border-radius: 10px;
@@ -11,9 +11,4 @@ body::-webkit-scrollbar-thumb {
 body::-webkit-scrollbar-track {
     border-radius: 0;
     background: rgba(0,0,0,0.1);
-}
-
-
-.guide-time{
-  color: gray;
 }
