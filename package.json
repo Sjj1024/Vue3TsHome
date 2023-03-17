@@ -6,7 +6,7 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri dev",
-    "publish": "tauri build"
+    "pubhome": "tauri build"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
