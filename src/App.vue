@@ -4,6 +4,7 @@ import { ResponseType } from '@tauri-apps/api/http'
 import { event } from 'vue-gtag'
 import { ref, reactive } from 'vue'
 import { copyToClipboard } from './utils/some'
+import { message, confirm } from '@tauri-apps/api/dialog'
 
 // google 统计
 event('login', { method: 'Google' })
@@ -21,12 +22,14 @@ var sourceUrl: string[] = [
 ]
 
 // 禁止右键等操作
-cantRightClick()
+// cantRightClick()
 
 // 初始化数据
 var moreInfo = ref('提示：数据加载中...')
 var guideTime = ref('地址更新时间...')
-var password = ref('')
+var updateUrl = ref('https://www.csdn.net/')
+var updateA = ref<any>(null)
+var password = ref<any>(null)
 var hiddenBox = ref(false)
 var realJsonLoc: any = reactive({
     data: {
@@ -181,6 +184,7 @@ function getChromeHuijiaData() {
         initInfo(realJson)
         Object.assign(realJsonLoc, realJson)
         // 页面嵌入info和分享内容
+        updateUrl = realJson.update.url
         moreInfo = realJson.data.more_info.trim()
         guideTime = realJson.data.guide_time.trim()
         shareContent = realJson.data.share
@@ -195,16 +199,27 @@ function getChromeHuijiaData() {
     }
 }
 
-function initInfo(realJson: any) {
+async function initInfo(realJson: any) {
     // 判断是否更新
     if (realJson.update.show && localVersion < realJson.version) {
         // 提醒更新
-        alert('更新提醒:' + realJson.update.content)
-        window.open(realJson.update.url, '_blank')
+        await message('更新提醒:' + realJson.update.content, {
+            title: '升级提醒',
+            type: 'info',
+        })
+        // console.log('updateA------', updateA)
+        updateA.value.click()
     }
     // 判断是否弹窗
     if (realJson.dialog.show) {
-        alert('提示内容:' + realJson.dialog.content)
+        // alert('提示内容:' + realJson.dialog.content)
+        const confirmed2 = await confirm(
+            '提示内容:' + realJson.dialog.content,
+            { title: '消息提醒', type: 'warning' }
+        )
+        if (confirmed2 && realJson.dialog.url) {
+          window.location.href = realJson.dialog.url
+        }
     }
 }
 
@@ -217,13 +232,14 @@ function storageSet(key: string, value: any) {
 }
 
 // 隐藏功能开启
-function tiggleHiddenBox() {
+async function tiggleHiddenBox() {
     console.log('password, realJson', password, realJsonLoc.password)
-
     if (password.value === realJsonLoc.password) {
         hiddenBox.value = !hiddenBox.value
+        localStorage.setItem('password', realJsonLoc.password)
     } else {
-        alert('密码不正确！')
+        await message('密码不正确！', { title: '1024回家', type: 'error' })
+        password.value = localStorage.getItem('password')
     }
     console.log('隐藏是否--', hiddenBox)
 }
@@ -238,6 +254,12 @@ function storageGet(key: string): any {
         console.log('storageGet反序列化出错', key, value)
     }
     return value
+}
+
+// 打开弹窗
+async function openMessage() {
+    await message('Tauri is awesome', 'Tauri')
+    await message('File not found', { title: 'Tauri', type: 'error' })
 }
 
 function shareDesk(val: any) {
@@ -370,6 +392,16 @@ function cantRightClick() {
                         <button class="btn" id="offAd">关闭广告</button>
                     </div>
                     <div>
+                        <button class="btn" @click="initInfo(realJsonLoc)">
+                            升级提醒
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn" @click="openMessage">
+                            打开弹窗
+                        </button>
+                    </div>
+                    <div>
                         <button class="btn" id="onAd">开启广告</button>
                     </div>
                 </div>
@@ -409,6 +441,13 @@ function cantRightClick() {
             </div>
         </div>
         <div class="footer">
+            <a
+                :href="updateUrl"
+                style="display: none"
+                ref="updateA"
+                target="_blank"
+                >升级链接</a
+            >
             <div class="footBox">
                 <div class="title">1024回家是世界上最好的色情网站目录！</div>
                 <div class="pInfo">
