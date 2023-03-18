@@ -377,16 +377,7 @@ function cantRightClick() {
                 <h3 class="tabTitle">隐藏功能</h3>
                 <div class="actionBox">
                     <div>
-                        <a
-                            class="btn"
-                            href="https://www.baidu.com/"
-                            target="_blank"
-                            style="text-decoration: none; margin-left: 0"
-                            >百度一下</a
-                        >
-                    </div>
-                    <div>
-                        <button class="btn" id="clearLocal">清空缓存</button>
+                        <button class="btn" id="clearLocal" style="margin-left: 0;">清空缓存</button>
                     </div>
                     <div>
                         <button class="btn" id="offAd">关闭广告</button>
