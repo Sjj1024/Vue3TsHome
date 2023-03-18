@@ -29,47 +29,42 @@
         "save": true
       }
     },
-    "package": {
-        "productName": "huijia-exe",
-        "version": "0.0.2"
+    "bundle": {
+      "active": true,
+      "icon": [
+        "icons/huijia32.png",
+        "icons/huijia128.png",
+        "icons/huijia256.png",
+        "icons/huijia.icns",
+        "icons/huijia.ico"
+      ],
+      "identifier": "com.desk1024.dev",
+      "targets": "all",
+      "shortDescription": "这里总有你想看的吧",
+      "longDescription": "只要有1024回家在，就能帮你找到回家的路。",
+      "windows": {
+        "webviewInstallMode": {
+          "type": "embedBootstrapper"
+        },
+        "wix": {
+          "language": "zh-CN"
+        }
+      }
     },
-    "tauri": {
-        "allowlist": {
-            "all": true,
-            "http": {
-                "scope": ["http://**", "https://**"]
-            },
-            "shell": {
-                "all": false,
-                "open": true
-            }
-        },
-        "bundle": {
-            "active": true,
-            "icon": [
-                "icons/huijia32.png",
-                "icons/huijia128.png",
-                "icons/huijia256.png",
-                "icons/huijia.icns",
-                "icons/huijia.ico"
-            ],
-            "identifier": "com.huijia.1024",
-            "targets": "all"
-        },
-        "security": {
-            "csp": null
-        },
-        "updater": {
-            "active": false
-        },
-        "windows": [
-            {
-                "fullscreen": false,
-                "resizable": true,
-                "title": "1024回家",
-                "width": 1000,
-                "height": 600
-            }
-        ]
-    }
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": true,
+        "title": "1024回家",
+        "width": 1000,
+        "height": 600
+      }
+    ]
+  }
 }
