@@ -63,7 +63,8 @@
         "resizable": true,
         "title": "1024回家",
         "width": 1000,
-        "height": 600
+        "height": 600,
+        "center": true
       }
     ]
   }
