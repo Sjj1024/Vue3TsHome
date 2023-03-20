@@ -626,7 +626,8 @@ function cantRightClick() {
 }
 
 .info {
-    color: red;
+    /* color: red; */
+    margin-top: 5px;
 }
 
 .actionBox {
