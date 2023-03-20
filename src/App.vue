@@ -308,7 +308,7 @@ function cantRightClick() {
 <template>
     <div class="container">
         <div class="tips tabBox">
-            <h3 class="tabTitle">1024回家桌面版desk</h3>
+            <h3 class="tabTitle">1024回家桌面版</h3>
             <div class="testBox">
                 <div class="testing">
                     <span class="action">试验功能：</span>
@@ -523,7 +523,7 @@ function cantRightClick() {
 }
 
 .testBox {
-    padding: 0px 10px 0 10px;
+  padding: 5px 20px;
 }
 
 .testing {
