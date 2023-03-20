@@ -368,7 +368,7 @@ function cantRightClick() {
                     type="text"
                     id="hide"
                     style="opacity: 0; height: 0px"
-                    value="11"
+                    value=""
                 />
             </div>
         </div>
@@ -523,7 +523,7 @@ function cantRightClick() {
 }
 
 .testBox {
-  padding: 5px 20px;
+  padding: 1px 20px;
 }
 
 .testing {
