@@ -360,10 +360,8 @@ function cantRightClick() {
                         分享软件
                     </button>
                 </div>
-                <div class="guide-time" id="guideTime">
-                    {{ guideTime }}
-                </div>
-                <div class="info" id="info">{{ moreInfo }}</div>
+                <div class="info" id="info" v-html="moreInfo"></div>
+                <div class="guide-time" id="guideTime" v-html="guideTime"></div>
                 <input
                     type="text"
                     id="hide"
@@ -496,7 +494,7 @@ function cantRightClick() {
                     如果我有问题的话，我要怎么才能联系你呢？
                 </div>
                 <div class="pInfo">
-                    如果你认为我的色情列表里面漏掉了某个很棒的XXX网站的话，你可以通过电子邮件聊联系到我：huijia1024@yandex.com<br />
+                    如果你认为我的色情列表里面漏掉了某个很棒的XXX网站的话，你可以通过电子邮件联系到我：huijia1024@yandex.com<br />
                     P.S.<br />
                     如果你是个性感女郎（18+），丰满人妻或性感AV女优的话，你也能直接拨打我的电话号码:911。<br />
                     以下是一些可以帮助网站管理员们改善他们的色情网站的小贴士。<br />
