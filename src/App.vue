@@ -64,7 +64,6 @@ http(sourceUrl[0], {
         if (!realJson) {
             // getExtensionBokeyuan()
             console.log('github 获取数据失败')
-            return
         } else {
             // 存储到缓存里面
             await storageSet('content', realContent)
@@ -100,7 +99,6 @@ function getExtensionBokeyuan() {
                 var realJson = JSON.parse(atob(realContent[1]))
                 if (!realJson) {
                     getExtensionCsdn()
-                    return
                 }
                 // 存储到缓存里面
                 storageSet('content', realContent[1])
@@ -145,14 +143,13 @@ function getExtensionCsdn() {
                 /VkdWxlIGV4cHJlc3Npb25z(.*?)VkdWxlIGV4cHJlc3Npb25z/
             )
             if (realContent && realContent.length >= 2) {
-                const contentReal = realContent[1].replaceAll('&#43;', '+')
+                const contentReal = realContent[1].replaceAll('&#43;', '+').replaceAll("&#61;", "=")
                 // console.log('CSDN匹配到的内容是', contentReal);
                 var realJson = JSON.parse(atob(contentReal))
                 if (!realJson) {
                     alert(
                         '地址获取失败，请更换网络后重试或邮件联系:1024xiaoshen@gmail.com'
                     )
-                    return
                 } else {
                     // 存储到缓存里面
                     storageSet('content', realContent[1])
