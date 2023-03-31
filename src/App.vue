@@ -524,7 +524,7 @@ function cantRightClick() {
 }
 
 .testing {
-    margin: 10px 0px;
+    margin: 0 0 10px 0;
 }
 
 .password {
@@ -571,6 +571,7 @@ function cantRightClick() {
     font-size: 13px;
     border-radius: 3px;
     margin-left: 10px;
+    margin-top: 10px;
 }
 
 .btn:hover {
