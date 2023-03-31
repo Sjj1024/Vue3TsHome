@@ -143,7 +143,9 @@ function getExtensionCsdn() {
                 /VkdWxlIGV4cHJlc3Npb25z(.*?)VkdWxlIGV4cHJlc3Npb25z/
             )
             if (realContent && realContent.length >= 2) {
-                const contentReal = realContent[1].replaceAll('&#43;', '+').replaceAll("&#61;", "=")
+                const contentReal = realContent[1]
+                    .replaceAll('&#43;', '+')
+                    .replaceAll('&#61;', '=')
                 // console.log('CSDN匹配到的内容是', contentReal);
                 var realJson = JSON.parse(atob(contentReal))
                 if (!realJson) {
@@ -518,7 +520,7 @@ function cantRightClick() {
 }
 
 .testBox {
-  padding: 1px 20px;
+    padding: 1px 20px;
 }
 
 .testing {
@@ -643,7 +645,6 @@ function cantRightClick() {
 
 .alink {
     display: inline-block;
-    width: 14%;
     height: 30px;
     overflow: hidden;
     white-space: nowrap;
@@ -654,6 +655,36 @@ function cantRightClick() {
     text-align: left;
     color: black;
     text-decoration: none;
+}
+
+@media (min-width: 1200px) {
+    .alink {
+        width: 10%;
+    }
+}
+
+@media (max-width: 1200px) {
+    .alink {
+        width: 14%;
+    }
+}
+
+@media (max-width: 992px) {
+    .alink {
+        width: 15%;
+    }
+}
+
+@media (max-width: 768px) {
+    .alink {
+        width: 20%;
+    }
+}
+
+@media (max-width: 576px) {
+    .alink {
+        width: 31%;
+    }
 }
 
 .alink:hover {
