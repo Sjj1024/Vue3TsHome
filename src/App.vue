@@ -16,13 +16,13 @@ var shareContent = ref('1024老司机邮箱: 1024xiaoshen@gmail.com')
 var gitSource = 'https://api.github.com/repos/Sjj1024/Sjj1024/contents'
 // 桌面程序的常量配置
 var sourceUrl: string[] = [
-    `${gitSource}/.github/hubsql/deskHuijia.txt`,
+    `https://api.github.com/repos/1024dasehn/TestSome/contents/.github/hubsql/deskHuijia.txt`,
     'https://www.cnblogs.com/sdfasdf/p/16101765.html',
     'https://xiaoshen.blog.csdn.net/article/details/129388703',
 ]
 
 // 禁止右键等操作
-// cantRightClick()
+cantRightClick()
 
 // 初始化数据
 var moreInfo = ref('提示：数据加载中...')
@@ -31,15 +31,7 @@ var updateUrl = ref('https://www.csdn.net/')
 var updateA = ref<any>(null)
 var password = ref<any>(null)
 var hiddenBox = ref(false)
-var realJsonLoc: any = reactive({
-    data: {
-        android: '',
-        windows: '',
-        macbook: '',
-        iphone: '',
-        yongjiu: '',
-    },
-})
+var realJsonLoc: any = reactive({})
 var hotUrls: any = reactive({})
 var navigations: any = reactive({})
 
@@ -48,6 +40,10 @@ let errorInfo: string = `加载数据失败!\r
   2.网站链接可能需要VPN翻墙后才能访问。\r
   3.有的网络运营商把网站屏蔽了，更换网络后重新打开试试。\r
   4.真不行请发邮件重新获取地址：1024xiaoshen@gmail.com`
+
+// 从缓存中读取数据并渲染
+getChromeHuijiaData()
+
 
 // 发送请求获取数据
 http(sourceUrl[0], {
