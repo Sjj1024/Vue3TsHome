@@ -44,7 +44,6 @@ let errorInfo: string = `加载数据失败!\r
 // 从缓存中读取数据并渲染
 getChromeHuijiaData()
 
-
 // 发送请求获取数据
 http(sourceUrl[0], {
     method: 'get',
@@ -63,14 +62,8 @@ http(sourceUrl[0], {
         } else {
             // 存储到缓存里面
             await storageSet('content', realContent)
-            // 判断是不是已经被缓存渲染了
-            var aHots = document.querySelectorAll('a')
-            if (aHots.length >= 10) {
-                console.log('已经被缓存渲染过了')
-            } else {
-                console.log('开始渲染地址...')
-                getChromeHuijiaData()
-            }
+            console.log('开始渲染地址...')
+            getChromeHuijiaData()
         }
     })
     .catch((error) => {
@@ -98,14 +91,8 @@ function getExtensionBokeyuan() {
                 }
                 // 存储到缓存里面
                 storageSet('content', realContent[1])
-                // 判断是不是已经被缓存渲染了
-                var aHots = document.querySelectorAll('a')
-                if (aHots.length >= 10) {
-                    console.log('已经被缓存渲染过了')
-                } else {
-                    console.log('开始渲染地址...')
-                    getChromeHuijiaData()
-                }
+                console.log('开始渲染地址...')
+                getChromeHuijiaData()
             }
         })
         .catch((error) => {
@@ -151,14 +138,8 @@ function getExtensionCsdn() {
                 } else {
                     // 存储到缓存里面
                     storageSet('content', realContent[1])
-                    // 判断是不是已经被缓存渲染了
-                    var aHots = document.querySelectorAll('a')
-                    if (aHots.length >= 10) {
-                        console.log('已经被缓存渲染过了')
-                    } else {
-                        console.log('开始渲染地址...')
-                        getChromeHuijiaData()
-                    }
+                    console.log('开始渲染地址...')
+                    getChromeHuijiaData()
                 }
             }
         })
@@ -191,6 +172,8 @@ function getChromeHuijiaData() {
         Object.assign(navigations, realJson.data.navigation)
         // navigations = realJson.data.navigation
         console.log('realJson.data.navigation', navigations)
+    } else {
+        console.log('没有缓存数据')
     }
 }
 
