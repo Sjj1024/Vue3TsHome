@@ -26,7 +26,7 @@ cantRightClick()
 
 // 初始化数据
 var moreInfo = ref('提示：数据加载中...')
-var guideTime = ref('地址更新时间...')
+var guideTime = ref('提示：数据加载中...')
 var updateUrl = ref('https://www.csdn.net/')
 var updateA = ref<any>(null)
 var password = ref<any>(null)
