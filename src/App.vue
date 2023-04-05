@@ -328,7 +328,7 @@ function cantRightClick() {
                         >iPhone版</a
                     >
                     <a
-                        :href="realJsonLoc.data.windows"
+                        :href="realJsonLoc.data.yongjiu"
                         class="btn"
                         target="_blank"
                         id="yongjiu"
