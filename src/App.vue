@@ -168,10 +168,10 @@ function getChromeHuijiaData() {
         initInfo(realJson)
         Object.assign(realJsonLoc, realJson)
         // 页面嵌入info和分享内容
-        updateUrl.value = realJson.update.url
-        moreInfo.value = realJson.data.more_info.trim()
-        guideTime.value = realJson.data.guide_time.trim()
-        shareContent.value = realJson.data.share
+        updateUrl.value = realJson && realJson.update && realJson.update.url
+        moreInfo.value = realJson && realJson.data && realJson.data.more_info
+        guideTime.value = realJson && realJson.data && realJson.data.guide_time
+        shareContent.value = realJson && realJson.data && realJson.data.share
         // 渲染导航
         Object.assign(hotUrls, realJson.data.navigation.hotbox)
         console.log('hotUrls-----', hotUrls)
