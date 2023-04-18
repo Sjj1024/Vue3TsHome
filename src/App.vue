@@ -11,7 +11,7 @@ event('login', { method: 'Google' })
 //app版本
 const localVersion = 0.1
 // 分享应用
-var shareContent = ref('1024老司机邮箱: 1024xiaoshen@gmail.com')
+var shareContent = ref('1024老司机邮箱: 1024huijia@gmail.com')
 // github信息
 var gitSource = 'https://api.github.com/repos/Sjj1024/Sjj1024/contents'
 // 桌面程序的常量配置
@@ -47,7 +47,7 @@ let errorInfo: string = `加载数据失败!\r
   1.网络可能有问题，请保持网络通畅后再试。\r
   2.网站链接可能需要VPN翻墙后才能访问。\r
   3.有的网络运营商把网站屏蔽了，更换网络后重新打开试试。\r
-  4.真不行请发邮件重新获取地址：1024xiaoshen@gmail.com`
+  4.真不行请发邮件重新获取地址: 1024huijia@gmail.com`
 
 // 从缓存中读取数据并渲染
 getChromeHuijiaData()
@@ -141,7 +141,7 @@ function getExtensionCsdn() {
                 var realJson = JSON.parse(atob(contentReal))
                 if (!realJson) {
                     alert(
-                        '地址获取失败，请更换网络后重试或邮件联系:1024xiaoshen@gmail.com'
+                        '地址获取失败，请更换网络后重试或邮件联系:1024huijia@gmail.com'
                     )
                 } else {
                     // 存储到缓存里面
