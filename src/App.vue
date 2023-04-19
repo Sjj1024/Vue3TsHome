@@ -269,14 +269,16 @@ function cantRightClick() {
 
     // mac电脑右键或者双指点击
     document.onmousedown = function(e){
-      e.preventDefault();
-      //  if(e.button ==2){
-      //      alert("你点了右键");
-      //  }else if(e.button ==0){
-      //      alert("你点了左键");
-      //  }else if(e.button ==1){
-      //      alert("你点了滚轮");
-      //  }
+       if(e.button ==2){
+          //  alert("你点了右键");
+           e.preventDefault();
+       }else if(e.button ==0){
+          //  alert("你点了左键");
+          console.log("你点了左键");
+       }else if(e.button ==1){
+          //  alert("你点了滚轮");
+           console.log("你点了滚轮");
+       }
    }
 
     //屏蔽右键菜单
