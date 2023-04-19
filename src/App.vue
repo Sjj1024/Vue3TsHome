@@ -270,7 +270,7 @@ function cantRightClick() {
     // mac电脑右键或者双指点击
     document.onmousedown = function(e){
        if(e.button ==2){
-          //  alert("你点了右键");
+          //  2是右键(对应 MAC 的双指点按)。
            e.preventDefault();
        }else if(e.button ==0){
           //  alert("你点了左键");
