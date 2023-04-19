@@ -294,7 +294,7 @@ function cantRightClick() {
 <template>
     <div class="container">
         <div class="tips tabBox">
-            <h3 class="tabTitle">1024回家桌面版</h3>
+            <h3 class="tabTitle">1024回家桌面版V{{ localVersion }}</h3>
             <div class="testBox">
                 <div class="testing">
                     <span class="action">试验功能：</span>
