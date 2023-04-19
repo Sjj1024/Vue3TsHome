@@ -32,11 +32,11 @@
     "bundle": {
       "active": true,
       "icon": [
-        "icons/huijia32.png",
-        "icons/huijia128.png",
-        "icons/huijia256.png",
-        "icons/huijia.icns",
-        "icons/huijia.ico"
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
       ],
       "identifier": "com.desk1024.dev",
       "targets": "all",
