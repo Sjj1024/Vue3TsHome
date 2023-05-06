@@ -36,6 +36,8 @@ var realJsonLoc: any = reactive({
         android: '',
         windows: '',
         macbook: '',
+        chrome: '',
+        monkey: '',
         iphone: '',
         yongjiu: '',
     },
@@ -341,6 +343,20 @@ function cantRightClick() {
                         target="_blank"
                         id="macbook"
                         >Mac电脑</a
+                    >
+                    <a
+                        :href="realJsonLoc.data.chrome"
+                        class="btn"
+                        target="_blank"
+                        id="chrome"
+                        >Chrome插件</a
+                    >
+                    <a
+                        :href="realJsonLoc.data.monkey"
+                        class="btn"
+                        target="_blank"
+                        id="monkey"
+                        >油猴脚本</a
                     >
                     <a
                         :href="realJsonLoc.data.iphone"
