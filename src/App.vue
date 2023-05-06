@@ -16,7 +16,7 @@ var shareContent = ref('1024老司机邮箱: 1024huijia@gmail.com')
 var gitSource = 'https://api.github.com/repos/Sjj1024/Sjj1024/contents'
 // 桌面程序的常量配置
 var sourceUrl: string[] = [
-    `https://api.github.com/repos/1024dasehn/TestSome/contents/.github/hubsql/deskHuijia.txt`,
+    `https://api.github.com/repos/1024huijia/TestSome/contents/.github/hubsql/deskHuijia.txt`,
     'https://www.cnblogs.com/sdfasdf/p/16101765.html',
     'https://xiaoshen.blog.csdn.net/article/details/129388703',
 ]
@@ -356,6 +356,20 @@ function cantRightClick() {
                         id="yongjiu"
                         >永久地址</a
                     >
+                    <a
+                        href="https://twitter.com/1024huijia?s=21"
+                        class="btn"
+                        target="_blank"
+                        id="yongjiu"
+                        >Twitter推特</a
+                    >
+                    <a
+                        href="https://t.me/+6Ycya_xTgsA2NGNl"
+                        class="btn"
+                        target="_blank"
+                        id="yongjiu"
+                        >Telegram群组</a
+                    >
                     <button class="btn" @click="shareDesk(shareContent)">
                         分享软件
                     </button>
@@ -494,7 +508,7 @@ function cantRightClick() {
                     如果我有问题的话，我要怎么才能联系你呢？
                 </div>
                 <div class="pInfo">
-                    如果你认为我的色情列表里面漏掉了某个很棒的XXX网站的话，你可以通过电子邮件联系到我：huijia1024@yandex.com<br />
+                    如果你认为我的色情列表里面漏掉了某个很棒的XXX网站的话，你可以通过电子邮件联系到我：1024huijia@gmail.com<br />
                     P.S.<br />
                     如果你是个性感女郎（18+），丰满人妻或性感AV女优的话，你也能直接拨打我的电话号码:911。<br />
                     以下是一些可以帮助网站管理员们改善他们的色情网站的小贴士。<br />
