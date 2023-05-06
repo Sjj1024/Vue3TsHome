@@ -22,7 +22,7 @@ var sourceUrl: string[] = [
 ]
 
 // 禁止右键等操作
-cantRightClick()
+// cantRightClick()
 
 // 初始化数据
 var moreInfo = ref('提示：数据加载中...')
@@ -556,6 +556,7 @@ function cantRightClick() {
     transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
     width: 200px;
     padding-right: 30px;
+    margin-right: 10px;
     line-height: 28px;
 }
 
@@ -585,7 +586,7 @@ function cantRightClick() {
     padding: 3px 5px;
     font-size: 13px;
     border-radius: 3px;
-    margin-left: 10px;
+    margin-right: 10px;
     margin-top: 10px;
 }
 
