@@ -22,7 +22,7 @@ var sourceUrl: string[] = [
 ]
 
 // 禁止右键等操作
-// cantRightClick()
+cantRightClick()
 
 // 初始化数据
 var moreInfo = ref('提示：数据加载中...')
